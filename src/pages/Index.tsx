@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { supabase } from "@/integrations/supabase/client";
+// import { localClient as supabase } from "@/integrations/localClient";
+// import { supabase } from "@/integrations/localClient";
 import { Download, Sparkles, FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,34 +29,34 @@ const Index = () => {
   const [resume, setResume] = useState<ResumeData>(emptyResume);
   const [aiLoading, setAiLoading] = useState(false);
 
-  const generateSummary = async () => {
-    if (!resume.jobTitle) {
-      toast.error("Please enter a target job title first.");
-      return;
-    }
-    if (resume.skills.length === 0) {
-      toast.error("Please add at least one skill.");
-      return;
-    }
+  // const generateSummary = async () => {
+  //   if (!resume.jobTitle) {
+  //     toast.error("Please enter a target job title first.");
+  //     return;
+  //   }
+  //   if (resume.skills.length === 0) {
+  //     toast.error("Please add at least one skill.");
+  //     return;
+  //   }
 
-    setAiLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("generate-summary", {
-        body: { jobTitle: resume.jobTitle, skills: resume.skills },
-      });
+  //   setAiLoading(true);
+  //   try {
+  //     const { data, error } = await supabase.functions.invoke("generate-summary", {
+  //       body: { jobTitle: resume.jobTitle, skills: resume.skills },
+  //     });
 
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+  //     if (error) throw error;
+  //     if (data?.error) throw new Error(data.error);
 
-      setResume((prev) => ({ ...prev, summary: data.summary }));
-      toast.success("AI summary generated!");
-    } catch (e: any) {
-      console.error(e);
-      toast.error(e.message || "Failed to generate summary.");
-    } finally {
-      setAiLoading(false);
-    }
-  };
+  //     setResume((prev) => ({ ...prev, summary: data.summary }));
+  //     toast.success("AI summary generated!");
+  //   } catch (e: any) {
+  //     console.error(e);
+  //     toast.error(e.message || "Failed to generate summary.");
+  //   } finally {
+  //     setAiLoading(false);
+  //   }
+  // };
 
   const handleDownload = () => {
     if (!resume.personal.fullName) {
@@ -103,7 +104,7 @@ const Index = () => {
           <SkillsForm skills={resume.skills} onChange={(skills) => setResume((p) => ({ ...p, skills }))} />
 
           {/* AI Summary */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <div className="flex items-center justify-between">
               <h3 className="font-heading text-lg font-semibold text-foreground">Professional Summary</h3>
               <Button variant="outline" size="sm" onClick={generateSummary} disabled={aiLoading} className="gap-1.5 text-xs">
@@ -117,7 +118,7 @@ const Index = () => {
               placeholder="Write or generate an AI-powered professional summary…"
               className="text-sm min-h-[80px]"
             />
-          </div>
+          </div> */}
 
           <Separator />
 
